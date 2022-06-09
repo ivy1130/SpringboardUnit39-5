@@ -7,9 +7,35 @@ import Card from "./Card";
 
 function Carousel(props) {
   const [cardIdx, setCardIdx] = useState(0);
+  const [leftArrowVis, setLeftArrowVis] = useState("none")
+  const [rightArrowVis, setRightArrowVis] = useState("")
+
   const card = props.cardData[cardIdx];
   const total = props.cardData.length;
-  const goForward = () => setCardIdx(cardIdx + 1);
+  
+  const goForward = () => {
+    setCardIdx(cardIdx + 1)
+    determineArrowVis(cardIdx + 1)
+  };
+  const goBackward = () => {
+    setCardIdx(cardIdx - 1)
+    determineArrowVis(cardIdx - 1)
+  };
+
+  const determineArrowVis = (newCardIdx) => {
+    if (newCardIdx === 0) {
+      setLeftArrowVis("none")
+      setRightArrowVis("")
+    }
+    else if (newCardIdx === (total - 1)) {
+      setRightArrowVis("none")
+      setLeftArrowVis("")
+    }
+    else {
+      setRightArrowVis("")
+      setLeftArrowVis("")
+    }
+  }
 
   return (
     <div className="Carousel">
@@ -17,7 +43,8 @@ function Carousel(props) {
       <div className="Carousel-main">
         <i
           className="fas fa-chevron-circle-left fa-2x"
-          onClick={goForward}
+          style={{display: leftArrowVis}}
+          onClick={goBackward}
           data-testid="left-arrow"
         />
         <Card
@@ -28,6 +55,7 @@ function Carousel(props) {
         />
         <i
           className="fas fa-chevron-circle-right fa-2x"
+          style={{display: rightArrowVis}}
           onClick={goForward}
           data-testid="right-arrow"
         />
